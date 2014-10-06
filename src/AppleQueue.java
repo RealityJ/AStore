@@ -1,37 +1,61 @@
-
 public class AppleQueue implements Queue {
 
-  public AppleQueue() {
-    // TODO Auto-generated constructor stub
+  private int        capacity;
+  private Customer[] queArray;
+  private int        front;
+  private int        end;
+
+  public AppleQueue(int qCap) {
+    capacity = qCap + 1;
+    queArray = new Customer[capacity];
+    front = 0;
+    end = -1;
   }
 
-  @Override public boolean enqueue(Object item) {
-    // TODO Auto-generated method stub
+  @Override public boolean enqueue(Object customer) {
+    if(end == capacity - 1) {
+      queArray[end++] = (Customer) customer;
+    }
     return false;
   }
 
   @Override public Object dequeue() {
-    // TODO Auto-generated method stub
-    return null;
+    Customer firstCust = queArray[front++];
+    if(front == capacity) {
+      front = 0;
+    }
+    return firstCust;
   }
 
   @Override public int size() {
-    // TODO Auto-generated method stub
-    return 0;
+    if (end >= front) {
+      return end - front;
+    }
+    else {
+      return (capacity - front) + (end + 1);
+    }
   }
 
   @Override public void doubleQueue() {
-    // TODO Auto-generated method stub
-    
+    capacity = capacity * 2;
+    Customer[] newQueArray = new Customer[capacity];
+    for(int i = 0; i < queArray.length; i++) {
+      newQueArray[i] = queArray[i];
+    }
+    queArray = newQueArray;
   }
 
   @Override public boolean isFull() {
-    // TODO Auto-generated method stub
+    if (front + capacity - 2 == end || end + 2 == front) {
+      return true;
+    }
     return false;
   }
 
   @Override public boolean isEmpty() {
-    // TODO Auto-generated method stub
+    if (end + 1 == front || (front + capacity - 1 == end)) {
+      return true;
+    }
     return false;
   }
 
