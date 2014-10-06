@@ -6,15 +6,15 @@ public class AppleQueue implements Queue {
   private int        end;
 
   public AppleQueue(int qCap) {
-    capacity = qCap + 1;
+    capacity = qCap;
     queArray = new Customer[capacity];
-    front = 0;
-    end = -1;
+    front = -1;
+    end = 0;
   }
 
-  @Override public boolean enqueue(Object customer) {
-    if(end == capacity - 1) {
-      queArray[end++] = (Customer) customer;
+  @Override public boolean  enqueue(Object customer) {
+    if(end != capacity) {
+      queArray[front] = (Customer) customer;
     }
     return false;
   }
