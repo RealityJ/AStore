@@ -1,8 +1,10 @@
 
  class AppleStore {
-
+	  int _capacity;
+	  int _sim;
+	  int _cperHour;
 	 
-	 public AppleStore(int qCapacity, int simHours, int custPerhour){
+	 public AppleStore(int qCapacity, int simHours, int custPerHour){
 		 /**
 		  * This methods performs a simulation of a store operation using a 
 		  * queue and prints the statistics.
@@ -14,7 +16,12 @@
 		  * The simulator starts at minute 0, and repeats every minute until 
 		  * it finishes the requested simulation time.
 		  */
-
+		 _capacity = qCapacity;
+		 _sim = simHours;
+		 _cperHour = custPerHour;
+		 
+		 
+		 
 	 }
 	 public void simulation(){
 		 
