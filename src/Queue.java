@@ -4,27 +4,25 @@
  * implement this interface must implement all its methods.
  * @author vangelis
  */
-public interface Queue<Item> {
-    
+public interface Queue<E> {
+	    
     /** Append item to the queue.
      * @param item. An item to add at the end of the queue.
      * @return true if the operation was successful and false if the operation
      * was unsuccessful, e.g. if the queue is full.
      */
-    public boolean enqueue(Item item);
+    public boolean enqueue(E item);
 
     /** Remove and return the front element of the queue.     
      * @return the front element of the queue.
      */
-    public Item dequeue();
+    public E dequeue();
 
     /** Return the number of elements in queue. */
     public int size();
-
+    	
     
-    /*
-     * double the capacity of the queue
-     */
+    
     public void doubleQueue();
     
     
@@ -45,5 +43,7 @@ public interface Queue<Item> {
     /**
      * @return a String that contains the information in the queue.
      */
+    
     public String toString();
 }
+	
