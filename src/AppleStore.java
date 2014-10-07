@@ -74,36 +74,33 @@ class AppleStore {
 
   public void sort(Customer[] unsorted) {
     System.out.println("sorting the patient customers");
-    Customer earliest = unsorted[0];
+    Customer earliest = null;
+    Customer[] sorted = new Customer[_cPerHour];
     for (int j = 0; j < _cPerHour; j++) {
-      System.out.println("Endering the first of the sorting loops");
+      System.out.println("Entering the first of the sorting loops");
       for (int i = 0; i < _cPerHour; i++) {
-        if (earliest.getArrivalTime() > unsorted[i].getArrivalTime()) {
+        if (earliest == null || earliest.getArrivalTime() < unsorted[i].getArrivalTime()) {
           earliest = unsorted[i];
           System.out.println(earliest.getArrivalTime());
         }
       }
-      if (queue.isFull()) {
-        queue.doubleQueue();
-        System.out.println("Queue doubled!");
-      }
-      queue.enqueue(earliest);
+      sorted[j] = earliest;
     }
   }
 
   public void sortImpatients(Customer[] unsorted) {
-    Customer earliestImpatient = unsorted[0];
+    System.out.println("sorting the impatient customers");
+    Customer earliest = null;
+    Customer[] sorted = new Customer[_cPerHour];
     for (int j = 0; j < _cPerHour; j++) {
+      System.out.println("Entering the first of the sorting loops");
       for (int i = 0; i < _cPerHour; i++) {
-        if (earliestImpatient.getArrivalTime() > unsorted[i].getArrivalTime() || unsorted[i] == null) {
-          earliestImpatient = unsorted[i];
+        if (earliest == null || earliest.getArrivalTime() < unsorted[i].getArrivalTime()) {
+          earliest = unsorted[i];
+          System.out.println(earliest.getArrivalTime());
         }
       }
-      if (impatientQueue.isFull()) {
-        impatientQueue.doubleQueue();
-        System.out.println("impatientsQueue doubled!");
-      }
-      impatientQueue.enqueue(earliestImpatient);
+      sorted[j] = earliest;
     }
   }
 
