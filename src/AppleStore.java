@@ -1,21 +1,26 @@
 
 class AppleStore {
-	final int _MinToHourConversion = 60;
+	final int _minToHourConversion = 60;
 	int _capacity;
 	int _sim;
-	int _cperHour;
+	int _cPerHour;
 	Customer _customer;
 	int _convertedHoursToMin = 0;
 	AppleQueue _queue;
+	int _customersNeededForThisHour;
+	Customer[] _customerLine;
+	Customer[] _hourCustomers;
 
 
 
 	public AppleStore(int qCapacity, int simHours, int custPerHour){
 		_capacity = qCapacity;
 		_sim = simHours;
-		_cperHour = custPerHour;
-		_convertedHoursToMin = simHours*_MinToHourConversion;
+		_cPerHour = custPerHour;
+		_convertedHoursToMin = simHours*_minToHourConversion;
 		_queue = new AppleQueue(_capacity);
+		_customersNeededForThisHour = _minToHourConversion/_cPerHour;
+		_customerLine = new Customer[_capacity];
 	}
 
 	/**
@@ -31,50 +36,27 @@ class AppleStore {
 	 */
 	
 	public void simulation(){
-		//creates the array to hold the customers
-		Customer[] _customerHolder = new Customer[this.getSimHours()*this.getCPerHour()];
-		Customer[] _leftHolder = new Customer[this.getSimHours()*this.getCPerHour()];
-		
-		if(_queue.size() < this.getSimHours()*this.getCPerHour()){
-			_queue.doubleQueue();
+		for(int i = 0; i <= _convertedHoursToMin; i++ ){
+			if(_customersNeededForThisHour == 0 && i%60 == 0){
+				_customersNeededForThisHour= _cPerHour;
+			}else if(_customersNeededForThisHour != 0 && i%60 != 0){
+				_customer = new Customer((int)(Math.random()*60)*100);
+				_customerLine[i] = _customer;
+				_customersNeededForThisHour--;
+			}else;
 		}
-
-		//loop that will create as many customers as needed by the simulation
-		for(int i = 0; i < (this.getSimHours()*this.getCPerHour()); i++){
-			//the new customers being created at random times
-			Customer _customerToBePlaced = new Customer((int)(Math.random()*100));
-			if(i > 5 && (int)Math.random() == 1){
-			_leftHolder[i] = _customerToBePlaced;	
-			}else{
-			//customers being placed into the array
-			_customerHolder[i] = _customerToBePlaced;
-			}
-		}	
-		//bubble sort by the arrival time in the array 
-		//TODO: Check if this is correct
-		for(int i = 0; i < _customerHolder.length; i++){
-			for( int j = 0; j < _customerHolder.length;j++){
-				if(_customerHolder[i].getArrivalTime() < _customerHolder[j].getArrivalTime() && _customerHolder[i].getArrivalTime() != 0 && _customerHolder[j].getArrivalTime() != 0){
-					Customer placeholder = _customerHolder[i];
-					_customerHolder[i] = _customerHolder[j];
-					_customerHolder[j] = placeholder;
+		for(int i = 0; i < _customerLine.length; i++){
+			for(int j = 0; j < _customerLine.length; j++){
+				if(_customerLine[i].getArrivalTime() > _customerLine[j+1].getArrivalTime()){
+				Customer placeholder = _customerLine[i];
+				_customerLine[i] = _customerLine[j+1]; 
+				_customerLine[j+1] = placeholder;
 				}
 			}
 		}
-		for(int i = 0; i < _customerHolder.length-1; i++){
-			System.out.print(_customerHolder[i].getArrivalTime() + ", ");
-			System.out.println(_customerHolder[i].getTimeForCustomer() + ", ");
-			if(_leftHolder[i] != null){
-				System.out.println("Customer left " + _leftHolder[i].getTimeForCustomer() + ", ");
-			}
+		for(int i = 0; i < _customerLine.length; i++){
+			System.out.print(" ," + _customerLine[i].getArrivalTime());
 		}
-		//queuing the customers into the line
-		for(int i = 0; i <= _customerHolder.length; i++){
-			_queue.enqueue(_customerHolder[i]);
-		}
-
-
-
 	}
 
 	/**
@@ -110,7 +92,7 @@ class AppleStore {
 		return _sim;
 	}
 	public int getCPerHour(){
-		return _cperHour;
+		return _cPerHour;
 	}
 }
 
