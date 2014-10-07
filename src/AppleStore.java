@@ -33,62 +33,71 @@ class AppleStore {
   public void simulation() {
     customerArrivalSimulation();
   }
-  
-  
+
   public void customerArrivalSimulation() {
-    for (int i = 0; i < _sim; i++) {    //runs simulation for desired hours
-      unsorted = new Customer[_cPerHour];    //creates a temp unsorted Customer array
+    System.out.println("_sim=" + _sim);
+    for (int i = 0; i < _sim; i++) {    // runs simulation for desired hours
+      System.out.println(i + ":hour");
+      unsorted = new Customer[_cPerHour];    // creates a temp unsorted Customer array
       unsortedImpatient = new Customer[_cPerHour];
       int impatientCount = 0;
-      for (int j = 0; j < _cPerHour; j++) {   //creates Customers for the number that arrive per hour
+      for (int j = 0; j < _cPerHour; j++) {   // creates Customers for the number that arrive per hour
         if (_cPerHour > 5) {
-          if (Math.random() >= 0.5) {   //~50% chance of turning away
-            unsorted[j] = new Customer((int) (Math.random() * 61)); //random int 0-60min
+          System.out.println("more then 5 people per hour");
+          if (Math.random() >= 0.5) {   // ~50% chance of turning away
+            unsorted[j - impatientCount] = new Customer((int) (Math.random() * 61)); // random int 0-60min
+            System.out.println(unsorted[j - impatientCount].getArrivalTime());
           }
           else {
             unsortedImpatient[impatientCount] = new Customer((int) (Math.random() * 61));
             impatientCount++;
+            System.out.println(unsortedImpatient[impatientCount].getArrivalTime());
           }
         }
         else {
-          unsorted[j] = new Customer((int) (Math.random() * 61));   //random int 0-60min
+          unsorted[j] = new Customer((int) (Math.random() * 61));   // random int 0-60min
+          System.out.println(unsorted[j].getArrivalTime());
         }
       }
       sortImpatients(unsortedImpatient);
-      sort(unsorted);   //sorts the unsorted customer array by arrival and enters them into queue
+      sort(unsorted);   // sorts the unsorted customer array by arrival and enters them into queue
     }
   }
 
   /**
    * print the info of all accepted customers
-   * @return 
+   * 
+   * @return
    */
 
   public void sort(Customer[] unsorted) {
+    System.out.println("sorting the patient customers");
     Customer earliest = unsorted[0];
-    for (int j = 0; j > _cPerHour; j++) {
-      for (int i = 0; i > _cPerHour; i++) {
+    for (int j = 0; j < _cPerHour; j++) {
+      System.out.println("Endering the first of the sorting loops");
+      for (int i = 0; i < _cPerHour; i++) {
         if (earliest.getArrivalTime() > unsorted[i].getArrivalTime()) {
           earliest = unsorted[i];
+          System.out.println(earliest.getArrivalTime());
         }
       }
-      if(queue.isFull()) {
+      if (queue.isFull()) {
         queue.doubleQueue();
         System.out.println("Queue doubled!");
       }
       queue.enqueue(earliest);
     }
   }
-  
+
   public void sortImpatients(Customer[] unsorted) {
     Customer earliestImpatient = unsorted[0];
-    for (int j = 0; j > _cPerHour; j++) {
-      for (int i = 0; i > _cPerHour; i++) {
+    for (int j = 0; j < _cPerHour; j++) {
+      for (int i = 0; i < _cPerHour; i++) {
         if (earliestImpatient.getArrivalTime() > unsorted[i].getArrivalTime()) {
           earliestImpatient = unsorted[i];
         }
       }
-      if(impatientQueue.isFull()) {
+      if (impatientQueue.isFull()) {
         impatientQueue.doubleQueue();
         System.out.println("impatientsQueue doubled!");
       }
