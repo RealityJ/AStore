@@ -59,7 +59,9 @@ class AppleStore {
           System.out.println(unsorted[j].getArrivalTime());
         }
       }
-      sortImpatients(unsortedImpatient);
+      if (unsortedImpatient.length > 0) {
+        sortImpatients(unsortedImpatient);
+      }
       sort(unsorted);   // sorts the unsorted customer array by arrival and enters them into queue
     }
   }
@@ -93,7 +95,7 @@ class AppleStore {
     Customer earliestImpatient = unsorted[0];
     for (int j = 0; j < _cPerHour; j++) {
       for (int i = 0; i < _cPerHour; i++) {
-        if (earliestImpatient.getArrivalTime() > unsorted[i].getArrivalTime()) {
+        if (earliestImpatient.getArrivalTime() > unsorted[i].getArrivalTime() || unsorted[i] == null) {
           earliestImpatient = unsorted[i];
         }
       }

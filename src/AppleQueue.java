@@ -19,35 +19,36 @@ public class AppleQueue implements Queue {
   }
 
   @Override public Customer dequeue() {
-    Customer tempCustomer = line[0];    //gets the customer at the front of the line
-    for (int i = 0; i <= end; i++) {    //everyone moves up one spot
+    Customer tempCustomer = line[0];    // gets the customer at the front of the line
+    for (int i = 0; i <= end; i++) {    // everyone moves up one spot
       line[i] = line[i + 1];
     }
-    return tempCustomer;    //returns the front customer
+    return tempCustomer;    // returns the front customer
   }
 
   @Override public int size() {
-    return end + 1;   //returns the number of people in line
+    return end + 1;   // returns the number of people in line
   }
 
   @Override public void doubleQueue() {
     capacity = capacity * 2;
-    Customer[] newQueArray = new Customer[capacity];    //makes a new line with twice the cap
-    for (int i = 0; i < line.length; i++) {   //moves all customers into the new line
+    Customer[] newQueArray = new Customer[capacity];    // makes a new line with twice the cap
+    System.out.println("newQueArray Created with a size of " + newQueArray.length);
+    for (int i = 0; i < line.length; i++) {   // moves all customers into the new line
       newQueArray[i] = line[i];
     }
-    line = newQueArray;     //makes the new line the name of the old line so we can do this again later
+    line = newQueArray;     // makes the new line the name of the old line so we can do this again later
   }
 
   @Override public boolean isFull() {
-    if (end == capacity) {   //if the end spot reference equals the capacity
+    if (end == capacity) {   // if the end spot reference equals the capacity
       return true;
     }
     return false;
   }
 
   @Override public boolean isEmpty() {
-    if(line[0] == null) {   //if the first spot in line is empty
+    if (line[0] == null) {   // if the first spot in line is empty
       return true;
     }
     return false;
