@@ -43,6 +43,7 @@ class AppleStore {
 				_customer = new Customer((int)(Math.random()*60)*100);
 				_customerLine[i] = _customer;
 				_customersNeededForThisHour--;
+				//testing
 			}else;
 		}
 		for(int i = 0; i < _customerLine.length; i++){
