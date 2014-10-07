@@ -18,7 +18,7 @@ public class AppleQueue implements Queue {
     return false;
   }
 
-  @Override public Object dequeue() {
+  @Override public Customer dequeue() {
     Customer tempCustomer = line[0];    //gets the customer at the front of the line
     for (int i = 0; i <= end; i++) {    //everyone moves up one spot
       line[i] = line[i + 1];
