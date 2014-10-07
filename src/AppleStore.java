@@ -20,7 +20,7 @@ class AppleStore {
 		_convertedHoursToMin = simHours*_minToHourConversion;
 		_queue = new AppleQueue(_capacity);
 		_customersNeededForThisHour = _minToHourConversion/_cPerHour;
-		_customerLine = new Customer[_capacity];
+		_customerLine = new Customer[simHours*custPerHour];
 	}
 
 	/**
@@ -36,7 +36,7 @@ class AppleStore {
 	 */
 	
 	public void simulation(){
-		for(int i = 0; i <= _convertedHoursToMin; i++ ){
+		for(int i = 0; i < _convertedHoursToMin; i++ ){
 			if(_customersNeededForThisHour == 0 && i%60 == 0){
 				_customersNeededForThisHour= _cPerHour;
 			}else if(_customersNeededForThisHour != 0 && i%60 != 0){
@@ -45,6 +45,7 @@ class AppleStore {
 				_customersNeededForThisHour--;
 			}else;
 		}
+		
 		for(int i = 0; i < _customerLine.length; i++){
 			for(int j = 0; j < _customerLine.length; j++){
 				if(_customerLine[i].getArrivalTime() > _customerLine[j+1].getArrivalTime()){
