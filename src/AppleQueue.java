@@ -31,13 +31,13 @@ public class AppleQueue implements Queue {
   }
 
   @Override public void doubleQueue() {
-    capacity = capacity * 2;
-    Customer[] newQueArray = new Customer[capacity];    // makes a new line with twice the cap
+    Customer[] newQueArray = new Customer[line.length * 2];    // makes a new line with twice the cap
     System.out.println("newQueArray Created with a size of " + newQueArray.length);
     for (int i = 0; i < line.length; i++) {   // moves all customers into the new line
       newQueArray[i] = line[i];
     }
     line = newQueArray;     // makes the new line the name of the old line so we can do this again later
+    capacity = line.length;
   }
 
   @Override public boolean isFull() {

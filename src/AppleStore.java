@@ -59,7 +59,7 @@ class AppleStore {
           System.out.println(unsorted[j].getArrivalTime());
         }
       }
-      if (unsortedImpatient.length > 0) {
+      if (unsortedImpatient[0] != null) {
         sortImpatients(unsortedImpatient);
       }
       sort(unsorted);   // sorts the unsorted customer array by arrival and enters them into queue
