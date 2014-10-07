@@ -34,7 +34,6 @@ class AppleStore {
 
   public void simulation() {
     customerArrivalSimulation();
-
   }
 
   public void customerArrivalSimulation() {
@@ -122,7 +121,7 @@ class AppleStore {
   }
 
   public void displayAcceptedCustomers() {
-
+    
   }
 
   /**
