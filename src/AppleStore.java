@@ -74,33 +74,44 @@ class AppleStore {
 
   public void sort(Customer[] unsorted) {
     System.out.println("sorting the patient customers");
-    Customer earliest = null;
-    Customer[] sorted = new Customer[_cPerHour];
-    for (int j = 0; j < _cPerHour; j++) {
-      System.out.println("Entering the first of the sorting loops");
-      for (int i = 0; i < _cPerHour; i++) {
-        if (earliest == null || earliest.getArrivalTime() < unsorted[i].getArrivalTime()) {
+    Customer[] sorted = new Customer[unsorted.length];
+    int earliestPos = 0;
+    for(int j = 0; j < unsorted.length; j++) {
+      Customer earliest = null;
+      for(int i = 0; i < unsorted.length; i++) {
+        if(unsorted[i] != null && (earliest == null || earliest.getArrivalTime() > unsorted[i].getArrivalTime())) {
           earliest = unsorted[i];
-          System.out.println(earliest.getArrivalTime());
+          earliestPos = i;
         }
       }
       sorted[j] = earliest;
+      unsorted[earliestPos] = null;
+      System.out.println(sorted[j].getArrivalTime());
+    }
+    for(int i = 0; i < sorted.length; i++) {
+      queue.enqueue(sorted[i]);
+      System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the queue");
     }
   }
 
   public void sortImpatients(Customer[] unsorted) {
-    System.out.println("sorting the impatient customers");
-    Customer earliest = null;
-    Customer[] sorted = new Customer[_cPerHour];
-    for (int j = 0; j < _cPerHour; j++) {
-      System.out.println("Entering the first of the sorting loops");
-      for (int i = 0; i < _cPerHour; i++) {
-        if (earliest == null || earliest.getArrivalTime() < unsorted[i].getArrivalTime()) {
+    System.out.println("sorting the patient customers");
+    Customer[] sorted = new Customer[unsorted.length];
+    int earliestPos = 0;
+    for(int j = 0; j < unsorted.length; j++) {
+      Customer earliest = null;
+      for(int i = 0; i < unsorted.length; i++) {
+        if(unsorted[i] != null && (earliest == null || earliest.getArrivalTime() > unsorted[i].getArrivalTime())) {
           earliest = unsorted[i];
-          System.out.println(earliest.getArrivalTime());
+          earliestPos = i;
         }
       }
       sorted[j] = earliest;
+      unsorted[earliestPos] = null;
+      System.out.println(sorted[j].getArrivalTime());
+    }
+    for(int i = 0; i < sorted.length; i++) {
+      impatientQueue.enqueue(sorted[i]);
     }
   }
 
