@@ -3,15 +3,15 @@ public class AppleStoreRunner {
 
           //maximum size of queue
           int qCapacity = Integer.parseInt(args[0]);
-          System.out.println("Capacity = " + qCapacity);
+//          System.out.println("Capacity = " + qCapacity);
 
           //number of simulation hours
           int simHours = Integer.parseInt(args[1]);
-          System.out.println("simulating hours = " + simHours);
+//          System.out.println("simulating hours = " + simHours);
 
           //average number of customers per hour
           int custPerHour = Integer.parseInt(args[2]);
-          System.out.println("custPerHour = " + custPerHour);
+//          System.out.println("custPerHour = " + custPerHour);
           
           AppleStore myStore = new AppleStore(qCapacity, simHours, custPerHour);
 

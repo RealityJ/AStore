@@ -2,6 +2,7 @@
 public class Customer {
 	int _timeForCustomer;
 	int _arrivalTime;
+	int finishedTime;
 
 
 	public Customer(){
@@ -20,6 +21,10 @@ public class Customer {
 	public int getTimeForCustomer(){
 		return _timeForCustomer;
 	}
+	
+	public int getFinishedTime() {
+	  return finishedTime;
+	}
 
 	public void setArrivalTime(int arrivalTime){
 		_arrivalTime = arrivalTime;
@@ -27,5 +32,9 @@ public class Customer {
 
 	public void setTimeForCustomer(int timeForCustomer){
 		_timeForCustomer = timeForCustomer;
+	}
+	
+	public void setFinishedTime(int finished) {
+	  finishedTime = finished;
 	}
 }

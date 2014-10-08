@@ -21,7 +21,7 @@ public class AppleQueue implements Queue {
     }
     line = newLine;
     for(int j = 0; j < line.length - 1; j++) {
-      System.out.println("Customer who arrived at " + line[j].getArrivalTime() + " was entered in spot " + j);
+//      System.out.println("Customer who arrived at " + line[j].getArrivalTime() + " was entered in spot " + j);
     }
 //    System.out.println("the resulting length was " + (line.length - 1));
     return false;
@@ -29,16 +29,21 @@ public class AppleQueue implements Queue {
 
   @Override public Customer dequeue() {
     Customer tempCustomer = line[0];    // gets the customer at the front of the line
-    System.out.println("line length= " + (line.length - 1));
+//    System.out.println("line length= " + (line.length));
     for (int i = 0; i < line.length; i++) {    // everyone moves up one spot
       if (line[i] != null) {
 //        System.out.println(i);
         line[i] = line[i + 1];
       }
     }
-    if (tempCustomer != null) {
+//    if (tempCustomer != null) {
 //      System.out.println("tempCust Arrival " + tempCustomer.getArrivalTime());
+//    }
+    Customer[] temp = new Customer[line.length - 1];
+    for(int j = 0; j < temp.length; j ++) {
+      temp[j] = line[j];
     }
+    line = temp;
     return tempCustomer;    // returns the front customer
   }
 
