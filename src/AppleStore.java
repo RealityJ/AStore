@@ -34,6 +34,26 @@ class AppleStore {
 
   public void simulation() {
     customerArrivalSimulation();
+    customerRunTimeSim();
+  }
+
+  public void customerRunTimeSim() {
+    Customer current = queue.dequeue();
+    System.out.println("current time " + current.getArrivalTime());
+    Customer impatientArrival = impatientQueue.dequeue();
+    System.out.println("impatient time " + impatientArrival.getArrivalTime());
+    int currentTimeLeft = -1;
+    for (int hours = 0; hours < _sim; hours++) {
+      for (int mins = 0; mins <= 60; mins++) {
+        if (current.getArrivalTime() == mins) {
+          currentTimeLeft = current.getTimeForCustomer();
+        }
+        if (currentTimeLeft != -1) {
+          currentTimeLeft--;
+
+        }
+      }
+    }
   }
 
   public void customerArrivalSimulation() {
@@ -45,7 +65,7 @@ class AppleStore {
       int patientCount = 0;
       for (int j = 0; j < _cPerHour; j++) {   // creates Customers for the number that arrive per hour
         if (j >= 5) {
-//          System.out.println("more then 5 people per hour");
+          // System.out.println("more then 5 people per hour");
           if (Math.random() >= 0.5) {   // ~50% chance of turning away
             unsorted.add(new Customer((int) (Math.random() * 61))); // random int 0-60min
             System.out.println(unsorted.get(patientCount).getArrivalTime() + " was patient");
@@ -63,9 +83,9 @@ class AppleStore {
           patientCount++;
         }
       }
-      if (!unsortedImpatient.isEmpty()) {
-        sortImpatients(unsortedImpatient);
-      }
+//      if (!unsortedImpatient.isEmpty()) {
+//        sortImpatients(unsortedImpatient);
+//      }
       sort(unsorted);   // sorts the unsorted customer array by arrival and enters them into queue
     }
   }
@@ -83,15 +103,17 @@ class AppleStore {
     for (int j = 0; j < unsorted2.size(); j++) {
       Customer earliest = null;
       for (int i = 0; i < unsorted2.size(); i++) {
-        if (unsorted2.get(i) != null && (earliest == null || earliest.getArrivalTime() > unsorted2.get(i).getArrivalTime())) {
+        if (unsorted2.get(i) != null
+            && (earliest == null || earliest.getArrivalTime() > unsorted2.get(i).getArrivalTime())) {
           earliest = unsorted2.get(i);
           earliestPos = i;
         }
       }
       sorted[j] = earliest;
-      unsorted2.set(earliestPos,null);
+      unsorted2.set(earliestPos, null);
       System.out.println(sorted[j].getArrivalTime());
     }
+    System.out.println("length is " + sorted.length);
     for (int i = 0; i < sorted.length; i++) {
       queue.enqueue(sorted[i]);
       System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the queue");
@@ -105,23 +127,26 @@ class AppleStore {
     for (int j = 0; j < unsortedImpatient2.size(); j++) {
       Customer earliest = null;
       for (int i = 0; i < unsortedImpatient2.size(); i++) {
-        if (unsortedImpatient2.get(i) != null && (earliest == null || earliest.getArrivalTime() > unsortedImpatient2.get(i).getArrivalTime())) {
+        if (unsortedImpatient2.get(i) != null
+            && (earliest == null || earliest.getArrivalTime() > unsortedImpatient2.get(i).getArrivalTime())) {
           earliest = unsortedImpatient2.get(i);
           earliestPos = i;
         }
       }
       sorted[j] = earliest;
-      unsortedImpatient2.set(earliestPos,null);
+      unsortedImpatient2.set(earliestPos, null);
       System.out.println(sorted[j].getArrivalTime());
     }
+    System.out.println("length is " + sorted.length);
     for (int i = 0; i < sorted.length; i++) {
-      queue.enqueue(sorted[i]);
+      System.out.println(sorted[i].getArrivalTime());
+      impatientQueue.enqueue(sorted[i]);
       System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the IMPATIENT queue");
     }
   }
 
   public void displayAcceptedCustomers() {
-    
+
   }
 
   /**
