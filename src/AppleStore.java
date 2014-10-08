@@ -221,7 +221,7 @@ class AppleStore {
    * print the info of all turned away customers
    */
   public void displayTurnAwayCustomers() {
-    System.out.println(impatientQueue.size() + " Customers turned away because they are impatient FUCKS");
+    System.out.println(impatientQueue.size() + " Customers turned away because they are impatient");
     while (0 < impatientQueue.size()) {
       // System.out.println("dequeueing Impatient at " + impatientQueue.size());
       Customer temp = impatientQueue.dequeue();
