@@ -14,6 +14,8 @@ class AppleStore {
 
   AppleQueue queue;
   AppleQueue impatientQueue;
+  AppleQueue acceptedQueue;
+  AppleQueue displayQueue;
 
   public AppleStore(int qCapacity, int simHours, int custPerHour) {
     _capacity = qCapacity;
@@ -22,6 +24,8 @@ class AppleStore {
     _convertedHoursToMin = simHours * _minToHourConversion;
     queue = new AppleQueue(_capacity);
     impatientQueue = new AppleQueue(_capacity);
+    acceptedQueue = new AppleQueue(_capacity);
+    displayQueue = new AppleQueue(_capacity);
     _customersNeededForThisHour = _minToHourConversion / _cPerHour;
   }
 
@@ -115,6 +119,8 @@ class AppleStore {
     // System.out.println("length is " + sorted.length);
     for (int i = sorted.length - 1; i >= 0; i--) {
       queue.enqueue(sorted[i]);
+      acceptedQueue.enqueue(sorted[i]);
+      displayQueue.enqueue(sorted[i]);
       // System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the queue");
     }
     // System.out.println("the resulting length was " + queue.size());
@@ -148,22 +154,13 @@ class AppleStore {
 
   public void displayAcceptedCustomers() {
     System.out.println(queue.size() + " Accepted Customers:");
-    ArrayList<Customer> acceptedCustomer = new ArrayList<Customer>(queue.size());
-    while (0 < queue.size()) {
-      Customer temp = queue.dequeue();
+    System.out.println(acceptedQueue.size());
+    while (0 < acceptedQueue.size()) {
+      Customer temp = acceptedQueue.dequeue();
       System.out.println("Customer arrived at " + temp.getArrivalTime() + " asking for " + temp.getTimeForCustomer());
-      acceptedCustomer.add(temp);
     }
-    for (int j = 0; j < acceptedCustomer.size(); j++) {
-      queue.enqueue(acceptedCustomer.get(j));
-    }
-    while (0 < queue.size()) {
-      Customer temp = queue.dequeue();
-      acceptedCustomer.add(temp);
-    }
-    for (int j = 0; j < acceptedCustomer.size(); j++) {
-      queue.enqueue(acceptedCustomer.get(j));
-    }
+    System.out.println(queue.size());
+    System.out.println(acceptedQueue.size());
     System.out.println("\n");
   }
 
@@ -173,40 +170,31 @@ class AppleStore {
 
   public void displayServedCustomers() {
     System.out.println("Displaying Served Customers");
-    ArrayList<Customer> line = new ArrayList<Customer>();
-    ArrayList<Customer> waiting = new ArrayList<Customer>();
-    ArrayList<Customer> served = new ArrayList<Customer>();
-    while (0 <= queue.size()) {
-      line.add(queue.dequeue());
-    }
-    Customer current = null;
-    int timeLeft = -1;
-    int count = 0;
-    for (int hour = 0; hour < _sim; hour++) {
-      for (int min = 0; min < 60; min++) {
-        timeLeft--;
-        if (timeLeft == 0) {
-          served.add(current);
+    System.out.println(queue.size());
+    System.out.println(displayQueue.size());
+    ArrayList<Customer> wait = new ArrayList<Customer>();
+    int timeLeft = 0;
+    int customerCount = 0;
+    for (int hours = 0; hours <= _sim; hours++) {
+      System.out.println("hour: " + hours);
+      for (int mins = 0; mins < 60; mins++) {
+//        System.out.println("min: " + mins);
+        Customer nextCustomer = displayQueue.dequeue();
+        if(nextCustomer != null && nextCustomer.getArrivalTime() <= mins) {
+          if(nextCustomer.getTimeForCustomer() == 0) {
+            System.out.println("Customer who Arrived at " + nextCustomer.getArrivalTime() + " was finished at " + ((hours*60)+mins));
+          }
+          else {
+            nextCustomer.setTimeForCustomer(nextCustomer.getTimeForCustomer() - 1);
+            displayQueue.enqueue(nextCustomer);
+          }
         }
-        if (!waiting.isEmpty() && timeLeft <= 0) {
-          current = waiting.get(0);
-          waiting.remove(0);
-        }
-        if (line.get(0).getArrivalTime() == min && timeLeft <= 0) {
-          current = line.get(0);
-          timeLeft = current.getTimeForCustomer();
-          line.remove(0);
-        }
-        if (line.get(count).getArrivalTime() == min && timeLeft > 0) {
-          waiting.add(line.get(count));
-          count++;
+        else {
+          displayQueue.enqueue(nextCustomer);
         }
       }
     }
-    for (int i = 0; i <= served.size(); i++) {
-      System.out.println("Customer arrived at " + line.get(i).getArrivalTime() + " requesting "
-          + line.get(i).getTimeForCustomer() + " and was finished at " + line.get(i).getFinishedTime());
-    }
+
     System.out.println("\n");
   }
 
@@ -244,121 +232,122 @@ class AppleStore {
   }
 }
 
- class Customer {
-	int _timeForCustomer;
-	int _arrivalTime;
-	int finishedTime;
+// ------------CUSTOMER------------//
+class Customer {
+  int _timeForCustomer;
+  int _arrivalTime;
+  int finishedTime;
 
+  public Customer() {
+    _arrivalTime = 0;
+    _timeForCustomer = 0;
+  }
 
-	public Customer(){
-		_arrivalTime = 0;
-		_timeForCustomer = 0;
-	}
-	public Customer(int timeArrived){
-		_arrivalTime = timeArrived;
-		_timeForCustomer = (int)(Math.random()*3 + 1);
-	}
+  public Customer(int timeArrived) {
+    _arrivalTime = timeArrived;
+    _timeForCustomer = (int) (Math.random() * 3 + 1);
+  }
 
-	public int getArrivalTime(){
-		return _arrivalTime;
-	}
+  public int getArrivalTime() {
+    return _arrivalTime;
+  }
 
-	public int getTimeForCustomer(){
-		return _timeForCustomer;
-	}
-	
-	public int getFinishedTime() {
-	  return finishedTime;
-	}
+  public int getTimeForCustomer() {
+    return _timeForCustomer;
+  }
 
-	public void setArrivalTime(int arrivalTime){
-		_arrivalTime = arrivalTime;
-	}
+  public int getFinishedTime() {
+    return finishedTime;
+  }
 
-	public void setTimeForCustomer(int timeForCustomer){
-		_timeForCustomer = timeForCustomer;
-	}
-	
-	public void setFinishedTime(int finished) {
-	  finishedTime = finished;
-	}
+  public void setArrivalTime(int arrivalTime) {
+    _arrivalTime = arrivalTime;
+  }
+
+  public void setTimeForCustomer(int timeForCustomer) {
+    _timeForCustomer = timeForCustomer;
+  }
+
+  public void setFinishedTime(int finished) {
+    finishedTime = finished;
+  }
 }
- class AppleQueue implements Queue {
 
-	  private int        capacity;
-	  private int        end = 0;
-	  private int        front;
-	  private Customer[] line;
+class AppleQueue implements Queue {
 
-	  public AppleQueue(int qCap) {
-	    capacity = qCap;
-	    line = new Customer[1];
-	  }
+  private int        capacity;
+  private int        end = 0;
+  private int        front;
+  private Customer[] line;
 
-	  @Override public boolean enqueue(Object customer) {
-	    Customer[] newLine = new Customer[line.length + 1];
-	    for(int i = line.length - 1; i >= 0; i--) {
-	      newLine[i] = (Customer) customer;
-	      if(line[i] != null) {
-	        newLine[i +1] = line[i];
-	      }
-	      
-	    }
-	    line = newLine;
-	    for(int j = 0; j < line.length - 1; j++) {
-//	      System.out.println("Customer who arrived at " + line[j].getArrivalTime() + " was entered in spot " + j);
-	    }
-//	    System.out.println("the resulting length was " + (line.length - 1));
-	    return false;
-	  }
+  public AppleQueue(int qCap) {
+    capacity = qCap;
+    line = new Customer[1];
+  }
 
-	  @Override public Customer dequeue() {
-	    Customer tempCustomer = line[0];    // gets the customer at the front of the line
-//	    System.out.println("line length= " + (line.length));
-	    for (int i = 0; i < line.length; i++) {    // everyone moves up one spot
-	      if (line[i] != null) {
-//	        System.out.println(i);
-	        line[i] = line[i + 1];
-	      }
-	    }
-//	    if (tempCustomer != null) {
-//	      System.out.println("tempCust Arrival " + tempCustomer.getArrivalTime());
-//	    }
-	    Customer[] temp = new Customer[line.length - 1];
-	    for(int j = 0; j < temp.length; j ++) {
-	      temp[j] = line[j];
-	    }
-	    line = temp;
-	    return tempCustomer;    // returns the front customer
-	  }
+  @Override public boolean enqueue(Object customer) {
+    Customer[] newLine = new Customer[line.length + 1];
+    for (int i = line.length - 1; i >= 0; i--) {
+      newLine[i] = (Customer) customer;
+      if (line[i] != null) {
+        newLine[i + 1] = line[i];
+      }
 
-	  @Override public int size() {
-	    return line.length - 1;   // returns the number of people in line
-	  }
+    }
+    line = newLine;
+    for (int j = 0; j < line.length - 1; j++) {
+      // System.out.println("Customer who arrived at " + line[j].getArrivalTime() + " was entered in spot " + j);
+    }
+    // System.out.println("the resulting length was " + (line.length - 1));
+    return false;
+  }
 
-	  @Override public void doubleQueue() {
-	    Customer[] newQueArray = new Customer[line.length * 2];    // makes a new line with twice the cap
-	    System.out.println("newQueArray Created with a size of " + newQueArray.length);
-	    for (int i = 0; i < line.length; i++) {   // moves all customers into the new line
-	      newQueArray[i] = line[i];
-	    }
-	    line = newQueArray;     // makes the new line the name of the old line so we can do this again later
-	    capacity = line.length;
-	  }
+  @Override public Customer dequeue() {
+    Customer tempCustomer = line[0];    // gets the customer at the front of the line
+    // System.out.println("line length= " + (line.length));
+    for (int i = 0; i < line.length; i++) {    // everyone moves up one spot
+      if (line[i] != null) {
+        // System.out.println(i);
+        line[i] = line[i + 1];
+      }
+    }
+    // if (tempCustomer != null) {
+    // System.out.println("tempCust Arrival " + tempCustomer.getArrivalTime());
+    // }
+    Customer[] temp = new Customer[line.length - 1];
+    for (int j = 0; j < temp.length; j++) {
+      temp[j] = line[j];
+    }
+    line = temp;
+    return tempCustomer;    // returns the front customer
+  }
 
-	  @Override public boolean isFull() {
-	    if (line[line.length - 1] != null) {   // if the end spot reference equals the capacity
-	      return true;
-	    }
-	    return false;
-	  }
+  @Override public int size() {
+    return line.length - 1;   // returns the number of people in line
+  }
 
-	  @Override public boolean isEmpty() {
-	    if (line[0] == null) {   // if the first spot in line is empty
-	      return true;
-	    }
-	    return false;
-	  }
+  @Override public void doubleQueue() {
+    Customer[] newQueArray = new Customer[line.length * 2];    // makes a new line with twice the cap
+    System.out.println("newQueArray Created with a size of " + newQueArray.length);
+    for (int i = 0; i < line.length; i++) {   // moves all customers into the new line
+      newQueArray[i] = line[i];
+    }
+    line = newQueArray;     // makes the new line the name of the old line so we can do this again later
+    capacity = line.length;
+  }
 
-	}
+  @Override public boolean isFull() {
+    if (line[line.length - 1] != null) {   // if the end spot reference equals the capacity
+      return true;
+    }
+    return false;
+  }
 
+  @Override public boolean isEmpty() {
+    if (line[0] == null) {   // if the first spot in line is empty
+      return true;
+    }
+    return false;
+  }
+
+}
