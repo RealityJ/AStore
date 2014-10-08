@@ -32,12 +32,12 @@ public class AppleQueue implements Queue {
     System.out.println("line length= " + (line.length - 1));
     for (int i = 0; i < line.length; i++) {    // everyone moves up one spot
       if (line[i] != null) {
-        System.out.println(i);
+//        System.out.println(i);
         line[i] = line[i + 1];
       }
     }
     if (tempCustomer != null) {
-      System.out.println(tempCustomer.getArrivalTime());
+//      System.out.println("tempCust Arrival " + tempCustomer.getArrivalTime());
     }
     return tempCustomer;    // returns the front customer
   }

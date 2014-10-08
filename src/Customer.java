@@ -10,7 +10,7 @@ public class Customer {
 	}
 	public Customer(int timeArrived){
 		_arrivalTime = timeArrived;
-		_timeForCustomer = (int)(Math.random()*3+1);
+		_timeForCustomer = (int)(Math.random()*3 + 1);
 	}
 
 	public int getArrivalTime(){
