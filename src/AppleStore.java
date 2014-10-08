@@ -37,7 +37,7 @@ class AppleStore {
    * minute until it finishes the requested simulation time.
    */
   public void simulation() {
-    for (int i = 0; i < _sim; i++) {    // runs simulation for desired hours
+    for (int i = _sim; i > 0; i--) {    // runs simulation for desired hours
       // System.out.println(i + ":hour");
       ArrayList<Customer> unsorted = new ArrayList<Customer>();    // creates a temp unsorted Customer array
       ArrayList<Customer> unsortedImpatient = new ArrayList<Customer>();
@@ -121,7 +121,7 @@ class AppleStore {
       queue.enqueue(sorted[i]);
       acceptedQueue.enqueue(sorted[i]);
       displayQueue.enqueue(sorted[i]);
-      // System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the queue");
+      System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the queue");
     }
     // System.out.println("the resulting length was " + queue.size());
   }
@@ -148,7 +148,7 @@ class AppleStore {
     for (int i = sorted.length - 1; i >= 0; i--) {
       // System.out.println(sorted[i].getArrivalTime());
       impatientQueue.enqueue(sorted[i]);
-      // System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the queue");
+      System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the Impatient queue");
     }
   }
 
@@ -175,24 +175,23 @@ class AppleStore {
     ArrayList<Customer> wait = new ArrayList<Customer>();
     int timeLeft = 0;
     int customerCount = 0;
-    for (int hours = 0; hours <= _sim; hours++) {
-      System.out.println("hour: " + hours);
-      for (int mins = 0; mins < 60; mins++) {
-//        System.out.println("min: " + mins);
-        Customer nextCustomer = displayQueue.dequeue();
-        if(nextCustomer != null && nextCustomer.getArrivalTime() <= mins) {
-          if(nextCustomer.getTimeForCustomer() == 0) {
-            System.out.println("Customer who Arrived at " + nextCustomer.getArrivalTime() + " was finished at " + ((hours*60)+mins));
-          }
-          else {
-            nextCustomer.setTimeForCustomer(nextCustomer.getTimeForCustomer() - 1);
-            displayQueue.enqueue(nextCustomer);
-          }
+    for (int mins = 0; mins < (60 * _sim); mins++) {
+      // System.out.println("min: " + mins);
+      Customer nextCustomer = displayQueue.dequeue();
+      if (nextCustomer != null && nextCustomer.getArrivalTime() <= mins) {
+        if (nextCustomer.getTimeForCustomer() == 0) {
+          System.out.println("Customer who Arrived at " + nextCustomer.getArrivalTime() + " requested "
+              + nextCustomer.getOriginalAskTime() + " and was finished at " + (mins));
         }
         else {
+          nextCustomer.setTimeForCustomer(nextCustomer.getTimeForCustomer() - 1);
           displayQueue.enqueue(nextCustomer);
         }
       }
+      else {
+        displayQueue.enqueue(nextCustomer);
+      }
+
     }
 
     System.out.println("\n");
@@ -202,7 +201,11 @@ class AppleStore {
    * print the info of all waiting customers
    */
   public void displayWaitingCustomers() {
-
+    System.out.println("Displaying Waiting " + displayQueue.size() + " Customers: ");
+    while (displayQueue.size() > 0) {
+      System.out.println("Customer who arrived at " + displayQueue.dequeue().getArrivalTime() + " is still in line");
+    }
+    System.out.println("\n");
   }
 
   /**
@@ -237,15 +240,18 @@ class Customer {
   int _timeForCustomer;
   int _arrivalTime;
   int finishedTime;
+  int originalTimeFor;
 
   public Customer() {
     _arrivalTime = 0;
     _timeForCustomer = 0;
+    originalTimeFor = 0;
   }
 
   public Customer(int timeArrived) {
     _arrivalTime = timeArrived;
     _timeForCustomer = (int) (Math.random() * 3 + 1);
+    originalTimeFor = _timeForCustomer;
   }
 
   public int getArrivalTime() {
@@ -258,6 +264,10 @@ class Customer {
 
   public int getFinishedTime() {
     return finishedTime;
+  }
+
+  public int getOriginalAskTime() {
+    return originalTimeFor;
   }
 
   public void setArrivalTime(int arrivalTime) {
