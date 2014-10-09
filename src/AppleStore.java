@@ -47,18 +47,18 @@ class AppleStore {
         if (j >= 5) {
           // System.out.println("more then 5 people per hour");
           if (Math.random() >= 0.5) {   // ~50% chance of turning away
-            unsorted.add(new Customer((int) (Math.random() * 61))); // random int 0-60min
+            unsorted.add(new Customer((int) (Math.random() * 61), i)); // random int 0-60min
             // System.out.println(unsorted.get(patientCount).getArrivalTime() + " was patient");
             patientCount++;
           }
           else {
-            unsortedImpatient.add(new Customer((int) (Math.random() * 61)));
+            unsortedImpatient.add(new Customer((int) (Math.random() * 61), i));
             // System.out.println(unsortedImpatient.get(impatientCount).getArrivalTime() + " was NOT patient");
             impatientCount++;
           }
         }
         else {
-          Customer temp = new Customer((int) (Math.random() * 61));
+          Customer temp = new Customer((int) (Math.random() * 61), i);
           unsorted.add(temp);   // random int 0-60min
           // System.out.println(unsorted.get(patientCount).getArrivalTime() + " arrived before the rush");
           patientCount++;
@@ -121,7 +121,7 @@ class AppleStore {
       queue.enqueue(sorted[i]);
       acceptedQueue.enqueue(sorted[i]);
       displayQueue.enqueue(sorted[i]);
-      System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the queue");
+      // System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the queue");
     }
     // System.out.println("the resulting length was " + queue.size());
   }
@@ -148,19 +148,19 @@ class AppleStore {
     for (int i = sorted.length - 1; i >= 0; i--) {
       // System.out.println(sorted[i].getArrivalTime());
       impatientQueue.enqueue(sorted[i]);
-      System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the Impatient queue");
+      // System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the Impatient queue");
     }
   }
 
   public void displayAcceptedCustomers() {
     System.out.println(queue.size() + " Accepted Customers:");
-    System.out.println(acceptedQueue.size());
+    // System.out.println(acceptedQueue.size());
     while (0 < acceptedQueue.size()) {
       Customer temp = acceptedQueue.dequeue();
       System.out.println("Customer arrived at " + temp.getArrivalTime() + " asking for " + temp.getTimeForCustomer());
     }
-    System.out.println(queue.size());
-    System.out.println(acceptedQueue.size());
+    // System.out.println(queue.size());
+    // System.out.println(acceptedQueue.size());
     System.out.println("\n");
   }
 
@@ -170,8 +170,8 @@ class AppleStore {
 
   public void displayServedCustomers() {
     System.out.println("Displaying Served Customers");
-    System.out.println(queue.size());
-    System.out.println(displayQueue.size());
+    // System.out.println(queue.size());
+    // System.out.println(displayQueue.size());
     ArrayList<Customer> wait = new ArrayList<Customer>();
     int timeLeft = 0;
     int customerCount = 0;
@@ -203,7 +203,9 @@ class AppleStore {
   public void displayWaitingCustomers() {
     System.out.println("Displaying Waiting " + displayQueue.size() + " Customers: ");
     while (displayQueue.size() > 0) {
-      System.out.println("Customer who arrived at " + displayQueue.dequeue().getArrivalTime() + " is still in line");
+      Customer temp = displayQueue.dequeue();
+      System.out.println("Customer who arrived at " + temp.getArrivalTime() + " is still in line asking for "
+          + temp.getTimeForCustomer() + " more minutes");
     }
     System.out.println("\n");
   }
@@ -241,6 +243,7 @@ class Customer {
   int _arrivalTime;
   int finishedTime;
   int originalTimeFor;
+  int hourArrive;
 
   public Customer() {
     _arrivalTime = 0;
@@ -248,8 +251,11 @@ class Customer {
     originalTimeFor = 0;
   }
 
-  public Customer(int timeArrived) {
-    _arrivalTime = timeArrived;
+  public Customer(int timeArrived, int hour) {
+    _arrivalTime = timeArrived + ((hour - 1) * 60);
+    // System.out.println("the customer arrived at the min " + timeArrived);
+    // System.out.println("This customer was recorded to arrive at " + _arrivalTime);
+    hourArrive = hour;
     _timeForCustomer = (int) (Math.random() * 3 + 1);
     originalTimeFor = _timeForCustomer;
   }
