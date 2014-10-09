@@ -140,7 +140,7 @@ class AppleStore {
       System.out.println("Customer arrived at " + temp.getArrivalTime() + " asking for " + temp.getTimeForCustomer());
     }
     // System.out.println(queue.size());
-    // System.out.println(acceptedQueue.size());
+    // System.out.println(acceptedQueue.size()););
     System.out.println("\n");
   }
 
@@ -173,7 +173,7 @@ class AppleStore {
       }
 
     }
-
+    System.out.println((queue.size() - displayQueue.size()) + " Customers were served during this simulation time");
     System.out.println("\n");
   }
 
