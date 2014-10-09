@@ -40,29 +40,24 @@ class AppleStore {
    */
   public void simulation() {
     for (int i = _sim; i > 0; i--) {    // runs simulation for desired hours
-      // System.out.println(i + ":hour");
       ArrayList<Customer> unsorted = new ArrayList<Customer>();    // creates a temp unsorted Customer array
       ArrayList<Customer> unsortedImpatient = new ArrayList<Customer>();
       int impatientCount = 0;
       int patientCount = 0;
       for (int j = 0; j < _cPerHour; j++) {   // creates Customers for the number that arrive per hour
         if (j >= 5) {
-          // System.out.println("more then 5 people per hour");
           if (Math.random() >= 0.5) {   // ~50% chance of turning away
             unsorted.add(new Customer((int) (Math.random() * 61), i)); // random int 0-60min
-            // System.out.println(unsorted.get(patientCount).getArrivalTime() + " was patient");
             patientCount++;
           }
           else {
             unsortedImpatient.add(new Customer((int) (Math.random() * 61), i));
-            // System.out.println(unsortedImpatient.get(impatientCount).getArrivalTime() + " was NOT patient");
             impatientCount++;
           }
         }
         else {
           Customer temp = new Customer((int) (Math.random() * 61), i);
           unsorted.add(temp);   // random int 0-60min
-          // System.out.println(unsorted.get(patientCount).getArrivalTime() + " arrived before the rush");
           patientCount++;
         }
       }
@@ -78,12 +73,10 @@ class AppleStore {
    */
 
   public void sort(ArrayList<Customer> unsorted2) {
-    // System.out.println("sorting the patient customers");
     Customer[] sorted = new Customer[unsorted2.size()];
     int earliestPos = 0;
     for (int j = 0; j < unsorted2.size(); j++) {
       Customer earliest = null;
-      // System.out.println("size of the patient array " + unsorted2.size());
       for (int i = 0; i < unsorted2.size(); i++) {
         if (unsorted2.get(i) != null
             && (earliest == null || earliest.getArrivalTime() > unsorted2.get(i).getArrivalTime())) {
@@ -93,25 +86,19 @@ class AppleStore {
       }
       sorted[j] = earliest;
       unsorted2.set(earliestPos, null);
-      // System.out.println("the earliest for this loop was " + sorted[j].getArrivalTime());
     }
-    // System.out.println("length is " + sorted.length);
     for (int i = sorted.length - 1; i >= 0; i--) {
       queue.enqueue(sorted[i]);
       acceptedQueue.enqueue(sorted[i]);
       displayQueue.enqueue(sorted[i]);
-      // System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the queue");
     }
-    // System.out.println("the resulting length was " + queue.size());
   }
 
   public void sortImpatients(ArrayList<Customer> unsortedImpatient2) {
-    // System.out.println("sorting the IMPATIENT customers");
     Customer[] sorted = new Customer[unsortedImpatient2.size()];
     int earliestPos = 0;
     for (int j = 0; j < unsortedImpatient2.size(); j++) {
       Customer earliest = null;
-      // System.out.println("size of the IMPATIENT array " + unsortedImpatient2.size());
       for (int i = 0; i < unsortedImpatient2.size(); i++) {
         if (unsortedImpatient2.get(i) != null
             && (earliest == null || earliest.getArrivalTime() > unsortedImpatient2.get(i).getArrivalTime())) {
@@ -121,26 +108,19 @@ class AppleStore {
       }
       sorted[j] = earliest;
       unsortedImpatient2.set(earliestPos, null);
-      // System.out.println("the earliest for this loop was " + sorted[j].getArrivalTime());
     }
-    // System.out.println("length is " + sorted.length);
     for (int i = sorted.length - 1; i >= 0; i--) {
-      // System.out.println(sorted[i].getArrivalTime());
       impatientQueue.enqueue(sorted[i]);
-      // System.out.println("pushed customer at " + sorted[i].getArrivalTime() + " to the Impatient queue");
     }
   }
 
   public void displayAcceptedCustomers() {
     System.out.println("Average customers per hour " + queue.size() / _sim + "\n");
     System.out.println(queue.size() + " Accepted Customers:");
-    // System.out.println(acceptedQueue.size());
     while (0 < acceptedQueue.size()) {
       Customer temp = acceptedQueue.dequeue();
       System.out.println("Customer arrived at " + temp.getArrivalTime() + " asking for " + temp.getTimeForCustomer());
     }
-    // System.out.println(queue.size());
-    // System.out.println(acceptedQueue.size()););
     System.out.println("\n");
   }
 
@@ -150,13 +130,10 @@ class AppleStore {
 
   public void displayServedCustomers() {
     System.out.println("Displaying Served Customers");
-    // System.out.println(queue.size());
-    // System.out.println(displayQueue.size());
     ArrayList<Customer> wait = new ArrayList<Customer>();
     int timeLeft = 0;
     int customerCount = 0;
     for (int mins = 0; mins < (60 * _sim); mins++) {
-      // System.out.println("min: " + mins);
       Customer nextCustomer = displayQueue.dequeue();
       if (nextCustomer != null && nextCustomer.getArrivalTime() <= mins) {
         if (nextCustomer.getTimeForCustomer() == 0) {
@@ -196,7 +173,6 @@ class AppleStore {
   public void displayTurnAwayCustomers() {
     System.out.println(impatientQueue.size() + " Customers turned away because they are impatient");
     while (0 < impatientQueue.size()) {
-      // System.out.println("dequeueing Impatient at " + impatientQueue.size());
       Customer temp = impatientQueue.dequeue();
       if (temp != null) {
         System.out.println("impatient customer arrived at " + temp.getArrivalTime() + " and left");
@@ -233,8 +209,6 @@ class Customer {
 
   public Customer(int timeArrived, int hour) {
     _arrivalTime = timeArrived + ((hour - 1) * 60);
-    // System.out.println("the customer arrived at the min " + timeArrived);
-    // System.out.println("This customer was recorded to arrive at " + _arrivalTime);
     hourArrive = hour;
     _timeForCustomer = (int) (Math.random() * 3 + 1);
     originalTimeFor = _timeForCustomer;
@@ -289,25 +263,18 @@ class AppleQueue implements Queue {
 
     }
     line = newLine;
-    for (int j = 0; j < line.length - 1; j++) {
-      // System.out.println("Customer who arrived at " + line[j].getArrivalTime() + " was entered in spot " + j);
-    }
-    // System.out.println("the resulting length was " + (line.length - 1));
+    for (int j = 0; j < line.length - 1; j++) {}
     return false;
   }
 
   @Override public Customer dequeue() {
     Customer tempCustomer = line[0];    // gets the customer at the front of the line
-    // System.out.println("line length= " + (line.length));
     for (int i = 0; i < line.length; i++) {    // everyone moves up one spot
       if (line[i] != null) {
-        // System.out.println(i);
         line[i] = line[i + 1];
       }
     }
-    // if (tempCustomer != null) {
-    // System.out.println("tempCust Arrival " + tempCustomer.getArrivalTime());
-    // }
+
     Customer[] temp = new Customer[line.length - 1];
     for (int j = 0; j < temp.length; j++) {
       temp[j] = line[j];
