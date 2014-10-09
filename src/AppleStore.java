@@ -12,6 +12,8 @@ class AppleStore {
   Customer[] unsorted;
   Customer[] unsortedImpatient;
 
+  int        averageCustomersPerHour;
+
   AppleQueue queue;
   AppleQueue impatientQueue;
   AppleQueue acceptedQueue;
@@ -68,29 +70,6 @@ class AppleStore {
       sort(unsorted);   // sorts the unsorted customer array by arrival and enters them into queue
     }
   }
-
-  // public void customerRunTimeSim() {
-  // System.out.println("Beginning the store run sim");
-  // Customer current = queue.dequeue();
-  // System.out.println("size of customer queue " + queue.size());
-  // System.out.println("current time " + current.getArrivalTime());
-  // System.out.println("size of impatient queue " + impatientQueue.size());
-  // Customer impatientArrival = impatientQueue.dequeue();
-  // System.out.println("impatient time " + impatientArrival.getArrivalTime());
-  // int currentTimeLeft = -1;
-  // for (int hours = 0; hours < _sim; hours++) {
-  // for (int mins = 0; mins <= 60; mins++) {
-  // if (current.getArrivalTime() == mins) {
-  // currentTimeLeft = current.getTimeForCustomer();
-  // System.out.println("Customer arrived at " + current.getArrivalTime() + " requesting " + currentTimeLeft);
-  // }
-  // if (currentTimeLeft != -1) {
-  // currentTimeLeft--;
-  //
-  // }
-  // }
-  // }
-  // }
 
   /**
    * print the info of all accepted customers
@@ -153,6 +132,7 @@ class AppleStore {
   }
 
   public void displayAcceptedCustomers() {
+    System.out.println("Average customers per hour " + queue.size() / _sim + "\n");
     System.out.println(queue.size() + " Accepted Customers:");
     // System.out.println(acceptedQueue.size());
     while (0 < acceptedQueue.size()) {
@@ -292,8 +272,6 @@ class Customer {
 class AppleQueue implements Queue {
 
   private int        capacity;
-  private int        end = 0;
-  private int        front;
   private Customer[] line;
 
   public AppleQueue(int qCap) {
